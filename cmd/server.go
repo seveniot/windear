@@ -22,7 +22,7 @@ import (
 
 const (
 	Version               = "0.0.1"
-	DefaultConfigFilePath = "config.yaml"
+	DefaultConfigFilePath = "conf/config.yaml"
 )
 
 type Config struct {

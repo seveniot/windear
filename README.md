@@ -6,7 +6,7 @@
 
 ## Introduction
 
-A simple MQTT broker write in Golang, which support cluster
+A simple MQTT broker write in Golang, which support cluster.
 
 ## Features
 
@@ -15,13 +15,21 @@ A simple MQTT broker write in Golang, which support cluster
 
 ## Getting Started
 
+#### dependent libraries
 ```
-windear -config config.yaml
+$ dep ensure
+```
 
+### build
+```
+$ go build
+```
+
+#### run
+```
+$ ./windear -c conf/config.yaml
 ```
 
 ## License
-
-© Schbook, 2018~time.Now
 
 Released under the [MIT License](https://github.com/SevenIOT/windear/blob/master/License)
