@@ -1,0 +1,32 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Temp files
+
+.DS_Store
+
+# go dep prune
+vendor/**/*
+!vendor/**/
+!vendor/**/*.go
+!vendor/**/*.c
+!vendor/**/*.cpp
+!vendor/**/*.s
+!vendor/**/COPYING*
+!vendor/**/PATENTS*
+!vendor/**/NOTICE*
+!vendor/**/Licence*
+!vendor/**/License*
+!vendor/**/LICENCE*
+!vendor/**/LICENSE*
+vendor/**/*_test.go

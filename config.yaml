@@ -1,0 +1,18 @@
+redis:
+  host: 127.0.0.1
+  port: 6379
+  passord:
+  maxIdle: 10
+  maxTotal: 10
+  idleTimeout: 240000
+  timeout: 3000
+  database: 0
+
+host:
+  ip: 127.0.0.1
+
+rpc:
+  port: 8888
+
+mqtt:
+  port: 1883

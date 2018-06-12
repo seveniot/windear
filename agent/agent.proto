@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "github.com.schbook.windear.rpc";
+option java_outer_classname = "RemoteAgentProto";
+
+package agent;
+
+// The greeting service definition.
+service RemoteAgent {
+  // Sends a greeting
+  rpc KickClient (Request) returns (Response) {}
+  rpc PubMsg (Request) returns (Response) {}
+}
+
+// The request message containing the user's name.
+message Request {
+  string clientId = 1;
+  bytes content = 2;
+}
+
+// The response message containing the greetings
+message Response {
+  Status status = 1;
+
+  enum Status {
+    SUCCESS = 0;
+    FAIL = 1;
+  }
+}

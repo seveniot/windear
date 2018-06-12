@@ -1,0 +1,22 @@
+package types
+
+const(
+	Reserved0 uint8 = iota
+	CONNECT
+	CONNACK
+	PUBLISH
+	PUBACK
+	PUBREC
+	PUBREL
+	PUBCOMP
+	SUBSCRIBE
+	SUBACK
+	UNSUBSCRIBE
+	UNSUBACK
+	PINGREQ
+	PINGRESP
+	DISCONNECT
+	Reserved15
+)
+
+
