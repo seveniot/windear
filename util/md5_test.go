@@ -7,8 +7,8 @@ import "testing"
  * @author: schbook
  * @email: seekerxu@163.com
  * @date: 2018/6/7
- * 
-*/
+ *
+ */
 
 func TestMD5(t *testing.T) {
 	output := MD5("Windear")

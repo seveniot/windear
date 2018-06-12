@@ -7,10 +7,10 @@ import "github.com/sirupsen/logrus"
  * @author: schbook
  * @email: seekerxu@163.com
  * @date: 2018/6/6
- * 
-*/
+ *
+ */
 
-func init(){
+func init() {
 	customFormatter := new(logrus.TextFormatter)
 	customFormatter.TimestampFormat = "2006-01-02 15:04:05"
 	customFormatter.FullTimestamp = true

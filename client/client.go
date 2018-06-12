@@ -20,7 +20,7 @@ type Client interface {
 	PubMsg(p *packet.PUBLISH)
 }
 
-func NewClient(hostIP,clientId, userName, password string, port int) Client {
+func NewClient(hostIP, clientId, userName, password string, port int) Client {
 	c := &defaultClient{
 		HostIP: hostIP,
 		Port:   port,

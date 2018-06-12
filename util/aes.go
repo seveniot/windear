@@ -1,9 +1,9 @@
 package util
 
 import (
-	"crypto/cipher"
-	"crypto/aes"
 	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
 )
 
 func AesEncrypt(origData, key []byte) ([]byte, error) {
@@ -32,7 +32,7 @@ func AesDecrypt(crypted, key []byte) ([]byte, error) {
 	return origData, nil
 }
 
-func PKCS5Padding(data []byte,blockSize int) []byte {
+func PKCS5Padding(data []byte, blockSize int) []byte {
 	padding := blockSize - len(data)%blockSize
 	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
 	return append(data, padtext...)

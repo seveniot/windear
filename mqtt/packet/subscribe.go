@@ -1,11 +1,11 @@
 package packet
 
-type SubTopic struct{
+type SubTopic struct {
 	Topic string
-	Qos uint8
+	Qos   uint8
 }
 
-type SUBSCRIBE struct{
+type SUBSCRIBE struct {
 	PacketIdentifier uint16
-	TopicArray []SubTopic
+	TopicArray       []SubTopic
 }

@@ -1,15 +1,15 @@
 package decode
 
 import (
-	"io"
 	"github.com/SevenIOT/windear/mqtt/packet/types"
+	"io"
 )
 
-type Packet struct{
-	PacketType uint8
-	Flag uint8
+type Packet struct {
+	PacketType   uint8
+	Flag         uint8
 	RemainLength uint32
-	Content []byte
+	Content      []byte
 }
 
 //func ParsePacket(reader io.Reader) (*Packet, exception.Exception){
@@ -57,34 +57,34 @@ type Packet struct{
 //	return p,nil
 //}
 
-func getDefaultFlag(packetType uint8) uint8{
+func getDefaultFlag(packetType uint8) uint8 {
 	//if packetType==types.PUBREL||packetType==types.SUBSCRIBE||packetType==types.UNSUBSCRIBE{
 	//	return 2
 	//}
-	switch packetType{
-	case types.PUBREL,types.SUBSCRIBE,types.UNSUBSCRIBE:
+	switch packetType {
+	case types.PUBREL, types.SUBSCRIBE, types.UNSUBSCRIBE:
 		return 2
 	}
 
 	return 0
 }
 
-func getBytesByLength(reader io.Reader,total uint32) (buf []byte, err error){
-	buf = make([]byte,total)
+func getBytesByLength(reader io.Reader, total uint32) (buf []byte, err error) {
+	buf = make([]byte, total)
 	var offset uint32 = 0
 
-	for{
+	for {
 		var l int
 
-		l,err = reader.Read(buf[offset:])
+		l, err = reader.Read(buf[offset:])
 
-		if err!=nil{
+		if err != nil {
 			return
 		}
 
 		offset += uint32(l)
 
-		if offset==total{
+		if offset == total {
 			return
 		}
 	}

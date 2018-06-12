@@ -1,26 +1,26 @@
 package codec
 
 import (
-	"github.com/SevenIOT/windear/mqtt/packet"
 	"github.com/SevenIOT/windear/ex"
+	"github.com/SevenIOT/windear/mqtt/packet"
 )
 
-func DecodeCONN(p *Packet) (*packet.CONNECT,error){
+func DecodeCONN(p *Packet) (*packet.CONNECT, error) {
 	if p.RemainLength < 7 {
-		return nil,ex.IncorrectRemainLength
+		return nil, ex.IncorrectRemainLength
 	}
 
 	var protocolName string
 	var err error
 
-	protocolName,p.Content,err = DecodeUtf8String(p.Content)
+	protocolName, p.Content, err = DecodeUtf8String(p.Content)
 
-	if err!=nil{
-		return nil,err
+	if err != nil {
+		return nil, err
 	}
 
-	if protocolName!="MQTT"{
-		return nil,ex.UnsupportedMqttVersion
+	if protocolName != "MQTT" {
+		return nil, ex.UnsupportedMqttVersion
 	}
 
 	//if p.Content[2] != 'M' || p.Content[3] != 'Q' || p.Content[4] != 'T' || p.Content[5] != 'T' {
@@ -29,7 +29,7 @@ func DecodeCONN(p *Packet) (*packet.CONNECT,error){
 
 	//MQTT version 3.1.1
 	if p.Content[0] != 4 {
-		return nil,ex.UnsupportedMqttVersion
+		return nil, ex.UnsupportedMqttVersion
 	}
 
 	connectFlag := packet.ConnectFlags(p.Content[1])
@@ -48,11 +48,11 @@ func DecodeCONN(p *Packet) (*packet.CONNECT,error){
 	//fmt.Println("keepalive:", keepalive)
 
 	connPacket := &packet.CONNECT{
-		Keepalive:uint16(p.Content[2])*256+uint16(p.Content[3]),
-		WillRetain:connectFlag.WillRetain(),
-		WillFlag:connectFlag.WillFlag(),
-		WillQos:connectFlag.WillQoS(),
-		CleanSession:connectFlag.CleanSession(),
+		Keepalive:    uint16(p.Content[2])*256 + uint16(p.Content[3]),
+		WillRetain:   connectFlag.WillRetain(),
+		WillFlag:     connectFlag.WillFlag(),
+		WillQos:      connectFlag.WillQoS(),
+		CleanSession: connectFlag.CleanSession(),
 	}
 
 	p.Content = p.Content[4:]
@@ -65,60 +65,60 @@ func DecodeCONN(p *Packet) (*packet.CONNECT,error){
 	//	return nil,IllegalPayloadDataException
 	//}
 
-	connPacket.ClientId,p.Content,err = DecodeUtf8String(p.Content)//string(p.Content[offset : reLen])
-	if err!=nil{
-		return nil,err
+	connPacket.ClientId, p.Content, err = DecodeUtf8String(p.Content) //string(p.Content[offset : reLen])
+	if err != nil {
+		return nil, err
 	}
 
-	if connPacket.WillFlag{
-		connPacket.WillTopic,p.Content,err = DecodeUtf8String(p.Content)
+	if connPacket.WillFlag {
+		connPacket.WillTopic, p.Content, err = DecodeUtf8String(p.Content)
 
-		if err!=nil{
-			return nil,err
+		if err != nil {
+			return nil, err
 		}
 
-		connPacket.WillMsg,p.Content,err = DecodeUtf8String(p.Content)
+		connPacket.WillMsg, p.Content, err = DecodeUtf8String(p.Content)
 
-		if err!=nil{
-			return nil,err
-		}
-	}
-
-	if connectFlag.UserNameFlag(){
-		connPacket.UserName,p.Content,err = DecodeUtf8String(p.Content)
-
-		if err!=nil{
-			return nil,err
+		if err != nil {
+			return nil, err
 		}
 	}
 
-	if connectFlag.PasswordFlag(){
-		connPacket.Password,p.Content,err = DecodeUtf8String(p.Content)
+	if connectFlag.UserNameFlag() {
+		connPacket.UserName, p.Content, err = DecodeUtf8String(p.Content)
 
-		if err!=nil{
-			return nil,err
+		if err != nil {
+			return nil, err
 		}
 	}
 
-	return connPacket,nil
+	if connectFlag.PasswordFlag() {
+		connPacket.Password, p.Content, err = DecodeUtf8String(p.Content)
+
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return connPacket, nil
 }
 
-func EncodeCONN(p *packet.CONNECT)[]byte{
+func EncodeCONN(p *packet.CONNECT) []byte {
 	var buffer []byte
 
-	buffer = append(buffer,uint8(0x10))
+	buffer = append(buffer, uint8(0x10))
 
-	remainBuffer := []byte{uint8(0),uint8(4),'M','Q','T','T',uint8(4)}//protocol name MQTT v3.1.1
-	remainBuffer = append(remainBuffer,p.GetConnectFlag())//connect flag
-	remainBuffer = append(remainBuffer,uint8(p.Keepalive>>8),uint8(p.Keepalive<<8))
-	remainBuffer = append(remainBuffer,EncodeUtf8String(p.ClientId)...)
-	remainBuffer = append(remainBuffer,EncodeUtf8String(p.UserName)...)
-	remainBuffer = append(remainBuffer,EncodeUtf8String(p.Password)...)
+	remainBuffer := []byte{uint8(0), uint8(4), 'M', 'Q', 'T', 'T', uint8(4)} //protocol name MQTT v3.1.1
+	remainBuffer = append(remainBuffer, p.GetConnectFlag())                  //connect flag
+	remainBuffer = append(remainBuffer, uint8(p.Keepalive>>8), uint8(p.Keepalive<<8))
+	remainBuffer = append(remainBuffer, EncodeUtf8String(p.ClientId)...)
+	remainBuffer = append(remainBuffer, EncodeUtf8String(p.UserName)...)
+	remainBuffer = append(remainBuffer, EncodeUtf8String(p.Password)...)
 
 	reLen := EncodeRemainLength(uint32(len(remainBuffer)))
 
-	buffer = append(buffer,reLen...)
-	buffer = append(buffer,remainBuffer...)
+	buffer = append(buffer, reLen...)
+	buffer = append(buffer, remainBuffer...)
 
 	return buffer
 }

@@ -1,6 +1,6 @@
 package encode
 
-func RemainLength(len uint32)(buf []byte){
+func RemainLength(len uint32) (buf []byte) {
 	//do
 	//encodedByte = X MOD 128
 	//X = X DIV 128
@@ -12,19 +12,19 @@ func RemainLength(len uint32)(buf []byte){
 	//while ( X > 0 )
 	//
 	//Where MOD is the modulo operator (% in C), DIV is integer division (/ in C), and OR is bit-wise or (| in C).
-	for{
+	for {
 		//encodedByte = X MOD 128
 		//MOD 128 equals AND 127
-		var b = uint8(len&0x7F)
+		var b = uint8(len & 0x7F)
 		len = len >> 7
 
-		if len>0{
-			b = b|0x80
+		if len > 0 {
+			b = b | 0x80
 		}
 
-		buf = append(buf,b)
+		buf = append(buf, b)
 
-		if len<=0{
+		if len <= 0 {
 			return
 		}
 	}

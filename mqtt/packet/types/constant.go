@@ -1,6 +1,6 @@
 package types
 
-const(
+const (
 	Reserved0 uint8 = iota
 	CONNECT
 	CONNACK
@@ -18,5 +18,3 @@ const(
 	DISCONNECT
 	Reserved15
 )
-
-

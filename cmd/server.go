@@ -3,10 +3,10 @@ package cmd
 import (
 	"flag"
 	"fmt"
-	"github.com/garyburd/redigo/redis"
-	"github.com/ghodss/yaml"
 	"github.com/SevenIOT/windear/log"
 	"github.com/SevenIOT/windear/server"
+	"github.com/garyburd/redigo/redis"
+	"github.com/ghodss/yaml"
 	"io/ioutil"
 	"os"
 	"time"
@@ -27,14 +27,14 @@ const (
 
 type Config struct {
 	Redis struct {
-		Host            string `yaml:"host"`
-		Port            int    `yaml:"port"`
-		Password        string `yaml:"password"`
-		Database        int    `yaml:"database"`
-		MaxIdle         int    `yaml:"maxIdle"`
-		MaxTotal        int    `yaml:"maxTotal"`
-		IdleTimeout     int    `yaml:"idleTimeout"`
-		Timeout         int64  `yaml:"timeout"`
+		Host        string `yaml:"host"`
+		Port        int    `yaml:"port"`
+		Password    string `yaml:"password"`
+		Database    int    `yaml:"database"`
+		MaxIdle     int    `yaml:"maxIdle"`
+		MaxTotal    int    `yaml:"maxTotal"`
+		IdleTimeout int    `yaml:"idleTimeout"`
+		Timeout     int64  `yaml:"timeout"`
 	} `yaml:"redis"`
 
 	Host struct {
@@ -83,12 +83,12 @@ func initConfig() bool {
 func StartServer() {
 	if initConfig() {
 		redisPool := &redis.Pool{
-			MaxIdle:         mConfig.Redis.MaxIdle,
-			MaxActive:       mConfig.Redis.MaxTotal,
-			IdleTimeout:     time.Duration(mConfig.Redis.IdleTimeout) * time.Millisecond,
+			MaxIdle:     mConfig.Redis.MaxIdle,
+			MaxActive:   mConfig.Redis.MaxTotal,
+			IdleTimeout: time.Duration(mConfig.Redis.IdleTimeout) * time.Millisecond,
 			Dial: func() (redis.Conn, error) {
 				return redis.Dial("tcp", fmt.Sprintf("%v:%v", mConfig.Redis.Host, mConfig.Redis.Port),
-					redis.DialConnectTimeout(time.Duration(mConfig.Redis.Timeout)*time.Millisecond),redis.DialPassword(mConfig.Redis.Password))
+					redis.DialConnectTimeout(time.Duration(mConfig.Redis.Timeout)*time.Millisecond), redis.DialPassword(mConfig.Redis.Password))
 			},
 		}
 		server.NewServer(mConfig.Mqtt.Port, mConfig.Rpc.Port, redisPool, mConfig.Host.IP).Start()

@@ -1,46 +1,46 @@
 package codec
 
 import (
-	"io"
 	"github.com/SevenIOT/windear/ex"
+	"io"
 )
 
-func DecodeRemainLen(reader io.Reader) (len uint32, err error){
+func DecodeRemainLen(reader io.Reader) (len uint32, err error) {
 	var (
 		multiplier uint32 = 0
-		b = make([]byte, 1)
+		b                 = make([]byte, 1)
 	)
 
 	for {
 		var l int
 
-		l,err = reader.Read(b)
+		l, err = reader.Read(b)
 
-		if l==0{
+		if l == 0 {
 			continue
 		}
 
-		if err!=nil{
-			return 0,err
+		if err != nil {
+			return 0, err
 		}
 
 		//encodedByte AND 127
-		len = len+uint32(b[0]&0x7F)<<multiplier
+		len = len + uint32(b[0]&0x7F)<<multiplier
 		multiplier += 7
 
 		//multiplier>128*128*128
-		if multiplier>21{
+		if multiplier > 21 {
 			//err = errors.New(fmt.Sprintf("illegal remain length multiplier:%v",multiplier))
-			return 0,ex.IncorrectRemainLengthMultiplier
+			return 0, ex.IncorrectRemainLengthMultiplier
 		}
 
-		if b[0]&0x80 ==0{
+		if b[0]&0x80 == 0 {
 			return
 		}
 	}
 }
 
-func EncodeRemainLength(len uint32)(buf []byte){
+func EncodeRemainLength(len uint32) (buf []byte) {
 	//do
 	//encodedByte = X MOD 128
 	//X = X DIV 128
@@ -52,21 +52,20 @@ func EncodeRemainLength(len uint32)(buf []byte){
 	//while ( X > 0 )
 	//
 	//Where MOD is the modulo operator (% in C), DIV is integer division (/ in C), and OR is bit-wise or (| in C).
-	for{
+	for {
 		//encodedByte = X MOD 128
 		//MOD 128 equals AND 127
-		var b = uint8(len&0x7F)
+		var b = uint8(len & 0x7F)
 		len = len >> 7
 
-		if len>0{
-			b = b|0x80
+		if len > 0 {
+			b = b | 0x80
 		}
 
-		buf = append(buf,b)
+		buf = append(buf, b)
 
-		if len<=0{
+		if len <= 0 {
 			return
 		}
 	}
 }
-
